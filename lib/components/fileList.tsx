@@ -6,10 +6,23 @@ import { FileText } from "lucide-react";
 
 const FileList = () => {
   const { files } = useFileDropzone();
+
+  const handleDragStart = (
+    event: React.DragEvent<HTMLDivElement>,
+    index: number,
+  ) => {
+    event.dataTransfer.setData("text/plain", index.toString());
+  };
+
   return (
-    <section>
+    <section className="grid grid-cols-4 gap-4">
       {files.map((file, index) => (
-        <Card key={index} draggable>
+        <Card
+          className="cursor-grab"
+          key={index}
+          draggable
+          onDragStart={(event) => handleDragStart(event, index)}
+        >
           <CardContent className="grid grid-cols-6">
             <span className="text-red-600 col-span-1">
               <FileText />

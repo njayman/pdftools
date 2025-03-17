@@ -1,18 +1,15 @@
 "use client";
-import React, { PropsWithChildren } from "react";
+import React from "react";
 import { FileDropzoneProvider } from "@app/lib/contexts/fileDropzoneContext";
-import Dropzone from "@app/lib/components/dropzone";
 import Link from "next/link";
 import FileList from "./fileList";
+import Navbar from "./navbar";
 
-const Homelayout: React.FC<PropsWithChildren> = ({ children }) => {
+const Homelayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <FileDropzoneProvider>
-      <header className="mx-auto container">
-        <h1 className="text-center">Pdftools</h1>
-      </header>
-      <main className="h-auto mx-auto container">
-        <Dropzone />
+      <Navbar />
+      <main className="h-auto mx-auto container grid grid-cols-1 gap-4">
         <FileList />
         {children}
       </main>
