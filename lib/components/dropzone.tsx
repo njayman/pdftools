@@ -67,6 +67,7 @@ const Dropzone = () => {
             className="hidden"
             onChange={handleFiles}
             accept="application/pdf"
+            multiple
           />
         </section>
       </DrawerContent>
