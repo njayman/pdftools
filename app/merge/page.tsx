@@ -1,17 +1,13 @@
 "use client";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@app/components/ui/carousel";
+import { Button } from "@app/components/ui/button";
 import MergeFileCard from "@app/lib/components/mergeFileCard";
 import { useFileDropzone } from "@app/lib/contexts/fileDropzoneContext";
-import React, { useState } from "react";
+import { Plus } from "lucide-react";
+import React from "react";
 
 const MergePage = () => {
-  const [filesForMerge, setFilesForMerge] = useState<File[]>([]);
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const [filesForMerge, setFilesForMerge] = React.useState<File[]>([]);
   const { files } = useFileDropzone();
 
   const addFilesForMerge = (file: File) => {
@@ -48,41 +44,65 @@ const MergePage = () => {
     event.preventDefault();
   };
 
+  React.useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        container.scrollLeft += e.deltaY;
+      }
+    };
+
+    container.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      container.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   return (
-    <section
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-      className="min-h-[40vh] border border-2 flex"
-    >
-      {filesForMerge.length !== 0 && (
-        <Carousel opts={{ align: "start", loop: true }} className="w-full">
-          <CarouselContent className="-ml-4">
+    <div className="grid gap-12">
+      <div className="flex flex-col gap-2">
+        <section
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          className="min-h-[40vh] border border-2 flex"
+        >
+          <div
+            className="w-full flex flex-nowrap overflow-x-scroll p-6 scrollbar-hide scroll-smooth"
+            ref={scrollContainerRef}
+          >
             {filesForMerge.map((fileForMerge, index) => (
-              <CarouselItem
-                key={index}
-                className="pl-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
-              >
-                <div className="p-1">
-                  <MergeFileCard
-                    file={fileForMerge}
-                    removeFile={() => {
-                      removeFromFilesForMerge(index);
-                    }}
-                  />
-                </div>
-              </CarouselItem>
+              <div key={index} className="flex items-center">
+                <MergeFileCard
+                  file={fileForMerge}
+                  removeFile={() => {
+                    removeFromFilesForMerge(index);
+                  }}
+                />
+                {index < filesForMerge.length - 1 && (
+                  <div className="flex-shrink-0 mx-4">
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      disabled
+                      aria-hidden="true"
+                      className="h-10 w-10 rounded-full"
+                    >
+                      <Plus className="h-4 w-4 text-muted-foreground" />
+                    </Button>
+                  </div>
+                )}
+              </div>
             ))}
-          </CarouselContent>
-          <div className="flex items-center justify-center mt-4 gap-2">
-            <CarouselPrevious className="static transform-none" />
-            {/*<span className="text-sm text-muted-foreground">
-            {currentIndex + 1} / {files.length}
-          </span>*/}
-            <CarouselNext className="static transform-none" />
           </div>
-        </Carousel>
-      )}
-    </section>
+        </section>
+        <div>
+          <Button className="ms-auto">Merge</Button>
+        </div>
+      </div>
+    </div>
   );
 };
 

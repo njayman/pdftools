@@ -17,22 +17,20 @@ const FileCard: React.FC<{
   return (
     <TooltipProvider>
       <Card
-        className="cursor-grab w-full overflow-hidden p-0"
+        className="cursor-grab w-[160px] relative group p-0"
         draggable
         onDragStart={onDragStart}
       >
-        <div className="relative">
-          <button
-            onClick={onRemoveFile}
-            className="absolute right-1 top-1 rounded-full bg-white/90 p-1 text-gray-700 shadow-sm hover:bg-white hover:text-gray-900 transition-colors z-10"
-            aria-label="Remove file"
-          >
-            <X className="h-3 w-3" />
-          </button>
-          <CardContent className="flex items-center justify-center p-4 h-24 bg-gray-50">
-            <FileText className="h-12 w-12 text-red-500" />
-          </CardContent>
-        </div>
+        <button
+          onClick={onRemoveFile}
+          className="cursor-pointer absolute right-1 top-1 rounded-full bg-white/90 p-1 text-gray-700 shadow-sm hover:bg-white hover:text-gray-900 transition-colors z-10"
+          aria-label="Remove file"
+        >
+          <X className="h-3 w-3" />
+        </button>
+        <CardContent className="flex items-center justify-center p-4 h-24 bg-gray-50">
+          <FileText className="h-12 w-12 text-red-500" />
+        </CardContent>
         <Tooltip>
           <TooltipTrigger asChild>
             <CardFooter className="flex items-center justify-center p-2 bg-white">

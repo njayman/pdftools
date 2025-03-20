@@ -22,18 +22,19 @@ const MergeFileCard: React.FC<{
   }, [file]);
   return (
     <Card
-      className="w-full max-md overflow-hidden p-0"
+      className="w-[280px] h-[360px] relative group flex-shrink-0 p-0"
       draggable
-      onDragStart={() => {}}
+      onDragStart={() => {
+        console.log("dragging");
+      }}
     >
       <div className="relative">
-        <Button
-          //variant="ghost"
+        <button
           className="absolute right-2 top-2 rounded-full bg-white/90 p-1 text-gray-700 shadow-sm hover:bg-white hover:text-gray-900 transition-colors"
           onClick={removeFile}
         >
           <X className="h-4 w-4" />
-        </Button>
+        </button>
         <CardContent className="p-0">
           {fileThumbnail ? (
             <div className="w-full h-48 overflow-hidden">
